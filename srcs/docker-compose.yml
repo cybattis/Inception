@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+#  wordpress:
+#    build: ./srcs/requirements/wordpress
+#    ports:
+#      - "9000:3306"
+#    networks:
+#      - inception
+#    volumes:
+#      - .
+
+  nginx:
+    build: ./srcs/requirements/nginx
+    ports:
+     - 80
+    networks:
+      - inception
+
+#  mariadb:
+#    build: ./srcs/requirements/mariadb
+#    ports:
+#     - 3306
+#    networks:
+#      - inception
+#    volumes:
+#     - .
+
+networks:
+  inception:
+    name: inception
