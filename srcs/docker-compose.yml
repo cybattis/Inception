@@ -1,19 +1,20 @@
 version: "3.9"
 
 services:
-#  wordpress:
-#    build: ./srcs/requirements/wordpress
-#    ports:
-#      - "9000:3306"
-#    networks:
-#      - inception
-#    volumes:
-#      - .
+  # wordpress:
+  #  build: ./srcs/requirements/wordpress
+  #  ports:
+  #    - 9000
+  #    - 3306
+  #  networks:
+  #    - inception
+  #  volumes:
+  #     - wp_data:/var/www/html
 
   nginx:
     build: ./srcs/requirements/nginx
     ports:
-     - 80
+     - 443:443
     networks:
       - inception
 
@@ -24,7 +25,11 @@ services:
 #    networks:
 #      - inception
 #    volumes:
-#     - .
+#     - db_data:.
+
+volumes:
+  wp_data:
+  db_data:
 
 networks:
   inception:
