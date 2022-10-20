@@ -1,35 +1,51 @@
 version: "3.9"
 
 services:
-  # wordpress:
-  #  build: ./srcs/requirements/wordpress
-  #  ports:
-  #    - 9000
-  #    - 3306
-  #  networks:
-  #    - inception
-  #  volumes:
-  #     - wp_data:/var/www/html
+  wordpress:
+   build: ./srcs/requirements/wordpress
+   env_file: .env
+   restart: always
+   ports:
+     - 9000
+   networks:
+     - inception
+   volumes:
+     - wordpress:/var/www/wordpress
 
   nginx:
     build: ./srcs/requirements/nginx
     ports:
      - 443:443
+    volumes:
+      - wordpress:/var/www/wordpress
     networks:
       - inception
 
-#  mariadb:
-#    build: ./srcs/requirements/mariadb
-#    ports:
-#     - 3306
-#    networks:
-#      - inception
-#    volumes:
-#     - db_data:.
+  mariadb:
+    build: ./srcs/requirements/mariadb
+    env_file: .env
+    restart: always
+    ports:
+     - 3306
+    networks:
+      - inception
+    volumes:
+     - db:/var/www/html
 
 volumes:
-  wp_data:
-  db_data:
+  wordpress:
+    name: wordpress
+    driver_opts:
+      type: "local"
+      o: bind
+      device: $HOME/data/wordpress
+  db:
+    name: db
+    driver_opts:
+      type: "local"
+      o: bind
+      device: $HOME/data/db
+
 
 networks:
   inception:

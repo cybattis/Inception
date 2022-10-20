@@ -4,7 +4,7 @@ DOCKER_COMPOSE_FILE	= -f ./srcs/docker-compose.yml
 # Recipe
 ################################
 
-start: build
+start:
 	docker compose $(DOCKER_COMPOSE_FILE) up -d
 
 stop:
@@ -16,7 +16,11 @@ show:
 build:
 	docker compose $(DOCKER_COMPOSE_FILE) build
 
+restart:
+	docker-compose $(DOCKER_COMPOSE_FILE) build --no-cache
+	docker-compose $(DOCKER_COMPOSE_FILE) up --build --force-recreate --no-deps -d
+
 clean:
 	docker compose $(DOCKER_COMPOSE_FILE) down --volumes
 
-.PHONY: start stop show build clean
+.PHONY: start stop show build clean restart
