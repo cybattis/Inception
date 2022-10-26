@@ -1,17 +1,18 @@
 #!/bin/bash
 set -e
 
-# set_config() {
-# 	key="$1"
-# 	value="$2"
-# 	php_escaped_value="$(php -r 'var_export($argv[1]);' "$value")"
-# 	sed_escaped_value="$(echo "$php_escaped_value" | sed 's/[\/&]/\\&/g')"
-# 	sed -ri "s/((['\"])$key\2\s*,\s*)(['\"]).*\3/\1$sed_escaped_value/" wp-config.php
-# }
+mkdir -p /var/www/wordpress
 
-# set_config 'DB_HOST' "$WORDPRESS_DB_HOST"
-# set_config 'DB_USER' "$WORDPRESS_DB_USER"
-# set_config 'DB_PASSWORD' "$WORDPRESS_DB_PASSWORD"
-# set_config 'DB_NAME' "$WORDPRESS_DB_NAME"
+if [ ! -f /var/www/wordpress/index.php ]; then
+    echo -e "Installing wordpress"
+    cd /var/www/wordpress
+    wp core download --allow-root --path=/var/www/wordpress
+    wp config create --allow-root --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USER --prompt=$MYSQL_PASSWORD
+    wp db create
+    wp core install --allow-root --url=$DOMAIN_NAME --title=$WP_NAME --admin_user=$WORDPRESS_ADMIN \
+    --admin_password=$WORDPRESS_ADMIN_PASSWORD
+    wp server --allow-root --port=443 --host=127.0.0.1
+    mkdir -p /var/run/
+fi
 
-exec "$@"
+php-fpm7.3 -FR

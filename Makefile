@@ -14,7 +14,7 @@ show:
 	docker compose $(DOCKER_COMPOSE_FILE) ps
 
 build:
-	docker compose $(DOCKER_COMPOSE_FILE) build
+	docker compose $(DOCKER_COMPOSE_FILE) build --no-cache
 
 restart:
 	docker-compose $(DOCKER_COMPOSE_FILE) build --no-cache
@@ -22,5 +22,6 @@ restart:
 
 clean:
 	docker compose $(DOCKER_COMPOSE_FILE) down --volumes
+	docker image prune -a
 
 .PHONY: start stop show build clean restart

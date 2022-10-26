@@ -2,13 +2,17 @@ FROM debian:buster
 
 WORKDIR /
 
+USER $WORDPRESS_USER
+
+EXPOSE 9000
+
 RUN apt-get -y update \
-&& apt-get -y --no-install-recommends install ca-certificates wget php7.3 php-mysqli php-fpm \
-&& mkdir -p /usr/share/webapps/ && cd /usr/share/webapps/ \
-&& wget http://wordpress.org/wordpress-5.9.5.tar.gz \
-&& tar -xzvf wordpress-5.9.5.tar.gz && rm wordpress-5.9.5.tar.gz
+&& apt-get install -y --no-install-recommends ca-certificates php-cli curl php7.3 php-mysqli php-fpm mariadb-client \
+&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+&& php wp-cli.phar --info \
+&& chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp \
+&& wp cli update
 
 COPY ./conf/entrypoint.sh /entrypoint.sh
-COPY ./conf/wp-config.php /var/www/wp-config.php
 
 ENTRYPOINT [ "/entrypoint.sh" ]

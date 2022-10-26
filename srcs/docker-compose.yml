@@ -2,20 +2,21 @@ version: "3.9"
 
 services:
   wordpress:
-   build: ./srcs/requirements/wordpress
-   env_file: .env
-   restart: always
-   ports:
-     - 9000
-   networks:
-     - inception
-   volumes:
-     - wordpress:/var/www/wordpress
+    build: ./srcs/requirements/wordpress
+    container_name: wordpress
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/wordpress
 
   nginx:
     build: ./srcs/requirements/nginx
+    container_name: nginx
+    restart: unless-stopped
     ports:
-     - 443:443
+      - 443:443
     volumes:
       - wordpress:/var/www/wordpress
     networks:
@@ -23,14 +24,13 @@ services:
 
   mariadb:
     build: ./srcs/requirements/mariadb
+    container_name: mariadb
+    restart: unless-stopped
     env_file: .env
-    restart: always
-    ports:
-     - 3306
     networks:
       - inception
     volumes:
-     - db:/var/www/html
+      - db:/var/www/html
 
 volumes:
   wordpress:
@@ -45,7 +45,6 @@ volumes:
       type: "local"
       o: bind
       device: $HOME/data/db
-
 
 networks:
   inception:
