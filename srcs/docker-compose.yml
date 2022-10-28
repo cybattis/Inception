@@ -10,6 +10,9 @@ services:
       - inception
     volumes:
       - wordpress:/var/www/wordpress
+    depends_on:
+      mariadb:
+        condition: service_started
 
   nginx:
     build: ./srcs/requirements/nginx
@@ -21,30 +24,33 @@ services:
       - wordpress:/var/www/wordpress
     networks:
       - inception
+    depends_on:
+      wordpress:
+        condition: service_started
 
   mariadb:
-    build: ./srcs/requirements/mariadb
+    build:  ./srcs/requirements/mariadb
     container_name: mariadb
     restart: unless-stopped
     env_file: .env
     networks:
       - inception
     volumes:
-      - db:/var/www/html
+      - mariadb:/var/lib/mysql
 
 volumes:
   wordpress:
     name: wordpress
     driver_opts:
-      type: "local"
+      type: none
       o: bind
       device: $HOME/data/wordpress
-  db:
-    name: db
+  mariadb:
+    name: mariadb
     driver_opts:
-      type: "local"
+      type: none
       o: bind
-      device: $HOME/data/db
+      device: $HOME/data/mariadb
 
 networks:
   inception:

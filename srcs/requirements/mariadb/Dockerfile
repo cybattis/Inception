@@ -1,19 +1,15 @@
 FROM debian:buster
 
-WORKDIR /
-
 EXPOSE 3306
 
-RUN apt-get -y update \
-&& apt-get install -y --no-install-recommends software-properties-common \
+RUN apt update -y && apt upgrade -y \
+&& apt-get install -y software-properties-common mariadb-server \
 && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update \
-&& apt-get install -y --no-install-recommends mariadb-server \
-&& rm -rf /var/lib/apt/lists/* \
-&& sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf \
-&& update-rc.d -f mysql disable
+COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY conf/db.sql /db.sql
 
-# COPY ./tools/entrypoint.sh /entrypoint.sh
+RUN service mysql start && mysql < db.sql
+RUN rm -f db.sql
 
-CMD [ "mysqld_safe" ]
+CMD [ "mysqld" ]

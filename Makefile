@@ -5,6 +5,8 @@ DOCKER_COMPOSE_FILE	= -f ./srcs/docker-compose.yml
 ################################
 
 start:
+	mkdir -p ~/data/wordpress
+	mkdir -p ~/data/mariadb
 	docker compose $(DOCKER_COMPOSE_FILE) up -d
 
 stop:
@@ -14,14 +16,18 @@ show:
 	docker compose $(DOCKER_COMPOSE_FILE) ps
 
 build:
+	mkdir -p ~/data/wordpress
+	mkdir -p ~/data/mariadb
 	docker compose $(DOCKER_COMPOSE_FILE) build --no-cache
 
-restart:
-	docker-compose $(DOCKER_COMPOSE_FILE) build --no-cache
-	docker-compose $(DOCKER_COMPOSE_FILE) up --build --force-recreate --no-deps -d
+restart: clean build start
 
 clean:
 	docker compose $(DOCKER_COMPOSE_FILE) down --volumes
-	docker image prune -a
+	docker image prune -af
+	rm -rf ~/data
 
-.PHONY: start stop show build clean restart
+fclean: clean
+	docker system prune -af
+
+.PHONY: start stop show build clean restart fclean

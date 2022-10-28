@@ -2,7 +2,7 @@ FROM debian:buster
 
 WORKDIR /
 
-RUN apt-get -y update \
+RUN apt-get -y update && apt-get upgrade -y \
 && apt-get -y --no-install-recommends install openssl nginx \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/* \
