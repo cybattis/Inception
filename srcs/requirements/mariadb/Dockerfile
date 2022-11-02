@@ -12,4 +12,4 @@ COPY conf/db.sql /db.sql
 RUN service mysql start && mysql < db.sql \
     && rm -f db.sql
 
-CMD [ "mysqld" ]
+CMD [ "mysqld_safe", "--datadir=/var/lib/mysql" ]

@@ -12,6 +12,7 @@ RUN apt-get -y update && apt-get -y install \
     -out /etc/nginx/ssl/ssl_certificate.crt \
     && rm /etc/nginx/sites-available/default && rm /etc/nginx/sites-enabled/default
 
+COPY ./conf/php.ini /etc/php/7.3/cli/
 COPY ./conf/nginx.conf /etc/nginx/sites-available/
 
 RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.conf \
