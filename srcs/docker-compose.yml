@@ -32,7 +32,10 @@ services:
     build:  ./srcs/requirements/mariadb
     container_name: mariadb
     restart: unless-stopped
-    env_file: .env
+    environment:
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
     networks:
       - inception
     volumes:

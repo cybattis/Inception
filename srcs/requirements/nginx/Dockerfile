@@ -3,16 +3,17 @@ FROM debian:buster
 EXPOSE 443
 
 RUN apt-get -y update && apt-get -y install \
-    openssl nginx \
+    nginx \
+    openssl \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /etc/nginx/ssl \
-    && openssl req -x509 -nodes -days 365 \
-    -subj  "/C=FR" \
-    -newkey rsa:2048 -keyout /etc/nginx/ssl/ssl_certificate_key.key \
-    -out /etc/nginx/ssl/ssl_certificate.crt \
-    && rm /etc/nginx/sites-available/default && rm /etc/nginx/sites-enabled/default
+    && openssl req -x509 -outform pem \
+    -out /etc/nginx/ssl/ssl_chain.pem \
+    -keyout /etc/nginx/ssl/ssl_keychain.pem \
+    -newkey rsa:4096 -nodes -sha256 -days 3650 \
+    -subj '/CN=localhost' \
+    && cat /etc/nginx/ssl/ssl_chain.pem > /etc/nginx/ssl/fullchain.pem
 
-COPY ./conf/php.ini /etc/php/7.3/cli/
 COPY ./conf/nginx.conf /etc/nginx/sites-available/
 
 RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.conf \
