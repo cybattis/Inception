@@ -4,7 +4,16 @@ services:
   wordpress:
     build: ./srcs/requirements/wordpress
     container_name: wordpress
-    env_file: .env
+    environment: 
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_HOST=$MYSQL_HOST
+      - MYSQL_PORT=$MYSQL_PORT
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - WORDPRESS_ADMIN=$WORDPRESS_ADMIN
+      - WORDPRESS_ADMIN_PASSWORD=$WORDPRESS_ADMIN_PASSWORD
+      - WORDPRESS_USER=$WORDPRESS_USER
+      - WORDPRESS_PASSWORD=$WORDPRESS_PASSWORD
     restart: unless-stopped
     networks:
       - inception
@@ -34,6 +43,7 @@ services:
     restart: unless-stopped
     environment:
       - MYSQL_USER=$MYSQL_USER
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
     networks:
