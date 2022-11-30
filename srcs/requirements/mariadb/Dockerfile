@@ -3,7 +3,7 @@ FROM debian:buster
 EXPOSE 3306
 
 RUN apt-get update -y && apt-get -y install \
-    mariadb-server \
+    mariadb-server procps \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld \
     && chmod 777 /var/run/mysqld

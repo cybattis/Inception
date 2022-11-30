@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ ! -d /var/lib/mysql/${MYSQL_DATABASE} ]; then
 
     mysql_install_db --datadir /var/lib/mysql
@@ -15,7 +14,8 @@ if [ ! -d /var/lib/mysql/${MYSQL_DATABASE} ]; then
 
     mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
-    sed -i "s/password =/password = ${MARIADB_ROOT_PWD} #/" /etc/mysql/debian.cnf
+    sed -i "s/password =/password = ${MYSQL_ROOT_PASSWORD} #/" /etc/mysql/debian.cnf
+
     service mysql stop
     echo "Database setup"
 else
