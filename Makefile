@@ -1,4 +1,4 @@
-HOME	=	/Users/cyril
+HOME	=	/home/cybattis
 DOCKER_COMPOSE_FILE	=	-f ./srcs/docker-compose.yml
 
 # Recipe
@@ -30,4 +30,10 @@ clean:
 fclean: clean
 	docker system prune -af
 
-.PHONY: start stop show build clean restart fclean
+reset:
+	docker stop $(docker ps -qa);
+	docker rm $(docker ps -qa);
+	docker rmi -f $(docker images -qa);
+	docker volume rm $(docker volume ls -q);
+
+.PHONY: start stop show build clean restart fclean reset
