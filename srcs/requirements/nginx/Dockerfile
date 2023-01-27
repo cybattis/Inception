@@ -8,11 +8,10 @@ RUN apt-get -y update && apt-get -y install \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /etc/nginx/ssl \
     && openssl req -x509 -outform pem \
-    -out /etc/nginx/ssl/ssl_chain.pem \
+    -out /etc/nginx/ssl/fullchain.pem \
     -keyout /etc/nginx/ssl/ssl_keychain.pem \
     -newkey rsa:4096 -nodes -sha256 -days 3650 \
-    -subj '/CN=localhost' \
-    && cat /etc/nginx/ssl/ssl_chain.pem > /etc/nginx/ssl/fullchain.pem
+    -subj '/CN=localhost'
 
 COPY ./conf/nginx.conf /etc/nginx/sites-available/
 

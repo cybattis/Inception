@@ -24,7 +24,7 @@ restart: clean build start
 
 clean:
 	docker compose $(DOCKER_COMPOSE_FILE) down --volumes
-	docker image prune -af
+	docker image rm srcs-nginx srcs-mariadb srcs-wordpress
 	rm -rf $(HOME)/data
 
 fclean: clean
